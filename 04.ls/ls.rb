@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-files = Dir.glob('*', File::FNM_DOTMATCH)
+require 'optparse'
+opt = OptionParser.new
+params = {}
+opt.on('-a [OPTIONAL]') { |files| params[:a] = Dir.glob('*', File::FNM_DOTMATCH) }
+opt.parse!(ARGV)
+files = params[:a] || Dir.glob('*')
+
 column = (files.count / 3.0).ceil
 sliced_files = files.each_slice(column).to_a
 max_size = sliced_files[0].size
