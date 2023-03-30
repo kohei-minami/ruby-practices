@@ -3,7 +3,8 @@
 require 'optparse'
 opt = OptionParser.new
 params = {}
-opt.on('-a [OPTIONAL]') { |files| params[:a] = Dir.glob('*', File::FNM_DOTMATCH) }
+option_a = Dir.glob('*', File::FNM_DOTMATCH)
+opt.on('-a [OPTIONAL]') { |files| params[:a] = option_a }
 opt.parse!(ARGV)
 files = params[:a] || Dir.glob('*')
 
