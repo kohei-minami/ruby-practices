@@ -3,10 +3,10 @@
 require 'optparse'
 opt = OptionParser.new
 params = {}
-option_a = Dir.glob('*', File::FNM_DOTMATCH)
-opt.on('-a [OPTIONAL]') { |files| params[:a] = option_a }
+opt.on('-a') { |v| params[:a] = v }
 opt.parse!(ARGV)
-files = params[:a] || Dir.glob('*')
+flags = params[:a] ? File::FNM_DOTMATCH : 0
+files = Dir.glob('*', flags)
 
 column = (files.count / 3.0).ceil
 sliced_files = files.each_slice(column).to_a
@@ -17,7 +17,7 @@ transposed_files = sliced_files.transpose
 longest_file = files.max_by(&:size)
 
 transposed_files.each do |name|
-  name.each.with_index do |file, _file_index|
+  name.each.with_index do |file, file_index|
     unless file.nil?
       print file.ljust(longest_file.size + 5)
     end
